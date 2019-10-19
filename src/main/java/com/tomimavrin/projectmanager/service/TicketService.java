@@ -23,8 +23,8 @@ public class TicketService {
         return this.ticketDao.createTicket(ticket);
     }
 
-    public List<Ticket> getAllTickets(UUID columnId){
-        return ticketDao.getAllTickets(columnId);
+    public List<Ticket> getAllTickets(){
+        return ticketDao.getAllTickets();
     }
 
     public int deleteTicket(UUID id){

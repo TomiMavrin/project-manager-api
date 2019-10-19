@@ -1,6 +1,7 @@
 package com.tomimavrin.projectmanager.dao;
 
 import com.tomimavrin.projectmanager.model.Ticket;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,8 +26,15 @@ public class TicketDataAccessService implements TicketDao {
     }
 
     @Override
-    public List<Ticket> getAllTickets(UUID columnID) {
-        return null;
+    public List<Ticket> getAllTickets() {
+        final String q = "SELECT * FROM TICKETS";
+        return jdbcTemplate.query(q, (resultSet, i) -> {
+            UUID uuid = UUID.fromString(resultSet.getString("id"));
+            String title = resultSet.getString("title");
+            String description = resultSet.getString("description");
+            int priority = resultSet.getInt("priority");
+            return new Ticket(uuid, title,description, priority);
+        });
     }
 
     @Override

@@ -55,6 +55,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>project-manager-api</finalName>
 	</build>
 
 </project>

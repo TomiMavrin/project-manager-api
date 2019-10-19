@@ -15,7 +15,7 @@ public interface TicketDao {
         return createTicket(id, ticket);
     };
 
-    List<Ticket> getAllTickets(UUID columnID);
+    List<Ticket> getAllTickets();
 
     Optional<Ticket> getTicket(UUID ticketID);
 

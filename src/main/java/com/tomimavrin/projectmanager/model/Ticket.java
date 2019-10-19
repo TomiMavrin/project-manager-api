@@ -14,18 +14,15 @@ public class Ticket {
     private final String title;
     private final String description;
     private final int priority;
-    private final List<UUID> assignedUsers;
 
     public Ticket(@JsonProperty("id") UUID id,
                   @JsonProperty("title") String title,
                   @JsonProperty("description") String description,
-                  @JsonProperty("priority") int priority,
-                  @JsonProperty("assigned") List<UUID> assignedUsers) {
+                  @JsonProperty("priority") int priority) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.priority = priority;
-        this.assignedUsers = assignedUsers;
     }
 
     public UUID getId() {
@@ -42,9 +39,5 @@ public class Ticket {
 
     public int getPriority() {
         return priority;
-    }
-
-    public List<UUID> getAssignedUsers() {
-        return assignedUsers;
     }
 }
