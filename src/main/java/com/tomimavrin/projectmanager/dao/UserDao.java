@@ -1,9 +1,6 @@
 package com.tomimavrin.projectmanager.dao;
 
-import com.tomimavrin.projectmanager.model.Ticket;
 import com.tomimavrin.projectmanager.model.User;
-
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,9 +13,9 @@ public interface UserDao {
         return createUser(id, user);
     };
 
-    Optional<Ticket> getUser(UUID userId);
+    Optional<User> getUser(UUID userId);
 
-    int editUser(UUID userId);
+    int editUser(User user);
 
     int deleteUser(UUID userId);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository("postgres")
+@Repository("tickets")
 public class TicketDataAccessService implements TicketDao {
 
     private final JdbcTemplate jdbcTemplate;

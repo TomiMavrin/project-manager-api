@@ -15,7 +15,7 @@ public class TicketService {
     private final TicketDao ticketDao;
 
     @Autowired
-    public TicketService(@Qualifier("postgres") TicketDao ticketDao) {
+    public TicketService(@Qualifier("tickets") TicketDao ticketDao) {
         this.ticketDao = ticketDao;
     }
 
