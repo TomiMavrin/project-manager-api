@@ -6,9 +6,12 @@ import com.tomimavrin.projectmanager.model.User;
 import com.tomimavrin.projectmanager.service.TicketService;
 import com.tomimavrin.projectmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MainController {
@@ -35,8 +38,9 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public TestingResponse login(){
-        return new TestingResponse("testing testing");
+    public Optional<User> login(){
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        return userService.getUser(auth.getName().toString());
     }
 
 
@@ -46,8 +50,8 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user){
-        userService.createUser(user);
+    public void register(@RequestBody User user, @RequestParam String password){
+        userService.createUser(user, password);
     }
 
     @PostMapping("/createTicket")

@@ -19,13 +19,15 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public int createUser(User user){
-        return this.userDao.createUser(user);
+    public int createUser(User user, String password){
+        return this.userDao.createUser(user, password);
     }
 
     public Optional<User> getUser(UUID userId){
         return this.userDao.getUser(userId);
     };
+
+    public Optional<User> getUser(String name){ return this.userDao.getUser(name); }
 
     public int editUser(User user){
         return this.userDao.editUser(user);
