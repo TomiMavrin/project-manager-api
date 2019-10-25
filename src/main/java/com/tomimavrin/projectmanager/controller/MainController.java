@@ -22,6 +22,23 @@ public class MainController {
         this.userService = userService;
     }
 
+    public class TestingResponse{
+        final String name;
+
+        public TestingResponse(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    @PostMapping("/login")
+    public TestingResponse login(){
+        return new TestingResponse("testing testing");
+    }
+
 
     @GetMapping("hello")
     public String hello(@RequestParam String name){
