@@ -38,15 +38,16 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
-                    .antMatchers("/hello", "/register")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated();
 
             http.csrf()
                     .disable();
             http.httpBasic();
+            http.authorizeRequests()
+                    .antMatchers("/hello", "/register", "/login")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated();
+
         }
 
     }

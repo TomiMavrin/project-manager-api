@@ -3,12 +3,14 @@ package com.tomimavrin.projectmanager.controller;
 
 import com.tomimavrin.projectmanager.model.Ticket;
 import com.tomimavrin.projectmanager.model.User;
+import com.tomimavrin.projectmanager.response.Response;
 import com.tomimavrin.projectmanager.service.TicketService;
 import com.tomimavrin.projectmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +40,15 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public Optional<User> login(){
+    public Response login(){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-        return userService.getUser(auth.getName().toString());
+        Optional<User> response = userService.getUser(auth.getName());
+        if(response.isEmpty()){
+            return new Response("failure", "Invalid login info.");
+        }
+        else{
+            return new Response("success", response);
+        }
     }
 
 
@@ -50,7 +58,7 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user, @RequestParam String password){
+    public void register(@RequestBody User user, @RequestBody String password){
         userService.createUser(user, password);
     }
 
