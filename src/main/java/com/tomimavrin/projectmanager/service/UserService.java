@@ -19,8 +19,8 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public int createUser(User user, String password){
-        return this.userDao.createUser(user, password);
+    public int createUser(User user) throws Exception{
+        return this.userDao.createUser(user);
     }
 
     public Optional<User> getUser(UUID userId){

@@ -58,8 +58,14 @@ public class MainController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user, @RequestBody String password){
-        userService.createUser(user, password);
+    public Response register(@RequestBody User user){
+        try {
+            userService.createUser(user);
+            return new Response("success", "User registered successfully");
+        }
+        catch (Exception e){
+            return new Response("failure", "User already exists");
+        }
     }
 
     @PostMapping("/createTicket")

@@ -26,10 +26,10 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public int createUser(UUID id, User user, String password) {
+    public int createUser(UUID id, User user) throws Exception{
         final String sql = "INSERT INTO USERS (id, email, password, name, enabled) VALUES(?, ?, ?, ?, ?)";
         final String auth = "INSERT INTO AUTHORITIES (email, authority) VALUES (?, ?)";
-        String code = passEncoder().encode(password);
+        String code = passEncoder().encode(user.getPassword());
         jdbcTemplate.update(auth,  user.getEmail(), "USER");
         return jdbcTemplate.update(sql , id, user.getEmail(), code, user.getName(), true);
     }
@@ -47,7 +47,7 @@ public class UserDataAccessService implements UserDao {
             UUID uuid = UUID.fromString(resultSet.getString("id"));
             String email = resultSet.getString("email");
             String username = resultSet.getString("name");
-            return new User(uuid,username,email);
+            return new User(uuid,username,email, "");
         });
         if(users.isEmpty()){
             return Optional.empty();

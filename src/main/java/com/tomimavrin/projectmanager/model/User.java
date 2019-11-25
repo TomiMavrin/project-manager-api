@@ -12,14 +12,17 @@ public class User {
     private final UUID id;
     private final String name;
     private final String email;
+    private final String password;
 
     @JsonCreator
     public User(@JsonProperty UUID id,
                 @JsonProperty String name,
-                @JsonProperty String email) {
+                @JsonProperty String email,
+                @JsonProperty String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
 
     }
 
@@ -34,5 +37,10 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
 
 }
