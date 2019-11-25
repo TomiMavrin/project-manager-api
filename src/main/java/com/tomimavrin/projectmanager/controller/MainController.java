@@ -64,7 +64,7 @@ public class MainController {
             return new Response("success", "User registered successfully");
         }
         catch (Exception e){
-            return new Response("failure", "User already exists");
+            return new Response("failure", e.toString());
         }
     }
 
