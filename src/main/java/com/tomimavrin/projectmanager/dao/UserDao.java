@@ -6,12 +6,7 @@ import java.util.UUID;
 
 public interface UserDao {
 
-    int createUser(UUID id, User user) throws Exception;
-
-    default int createUser(User user) throws Exception{
-        UUID id = UUID.randomUUID();
-        return createUser(id, user);
-    };
+    int createUser(User user) throws Exception;
 
     Optional<User> getUser(UUID userId);
 

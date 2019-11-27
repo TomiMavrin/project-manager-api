@@ -26,12 +26,12 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public int createUser(UUID id, User user) throws Exception{
-        final String sql = "INSERT INTO USERS (id, email, password, name, enabled) VALUES(?, ?, ?, ?, ?)";
+    public int createUser(User user) throws Exception{
+        final String sql = "INSERT INTO USERS (email, password, name, enabled) VALUES(?, ?, ?, ?)";
         final String auth = "INSERT INTO AUTHORITIES (email, authority) VALUES (?, ?)";
         String code = passEncoder().encode(user.getPassword());
         jdbcTemplate.update(auth,  user.getEmail(), "USER");
-        return jdbcTemplate.update(sql , id, user.getEmail(), code, user.getName(), true);
+        return jdbcTemplate.update(sql , user.getEmail(), code, user.getName(), true);
     }
 
     @Override
