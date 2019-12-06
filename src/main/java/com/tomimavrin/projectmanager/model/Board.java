@@ -5,25 +5,21 @@ import java.util.UUID;
 
 public class Board {
 
-    private final UUID id;
-    private final List<Column> columns;
     private final String name;
+    private final String description;
 
-    public Board(UUID id, List<Column> columns, String name) {
-        this.id = id;
-        this.columns = columns;
+    public Board(String name, String description) {
+
         this.name = name;
-    }
-
-    public List<Column> getColumns() {
-        return columns;
-    }
-
-    public UUID getId() {
-        return id;
+        this.description = description;
     }
 
     public String getName() {
         return name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
 }
