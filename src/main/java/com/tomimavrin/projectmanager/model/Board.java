@@ -5,11 +5,12 @@ import java.util.UUID;
 
 public class Board {
 
+    private final UUID id;
     private final String name;
     private final String description;
 
-    public Board(String name, String description) {
-
+    public Board(UUID id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
@@ -22,4 +23,7 @@ public class Board {
         return description;
     }
 
+    public UUID getId() {
+        return id;
+    }
 }

@@ -20,15 +20,21 @@ public class BoardDataAccessService implements BoardDao {
 
     @Override
     public int createBoard(Board board, UUID userId) {
-        final String transaction ="WITH rows AS ( " +
+        final String transaction ="BEGIN; WITH rows AS ( " +
                 "INSERT INTO boards (name, description) VALUES (?, ?) RETURNING id)" +
-                "INSERT INTO users_boards (board_id, user_id) SELECT id, ? from rows;";
+                "INSERT INTO users_boards (board_id, user_id) SELECT id, ? from rows; COMMIT;";
         return jdbcTemplate.update(transaction , board.getName(),board.getDescription(), userId );
     }
 
     @Override
-    public List<Board> getAllUserBoards() {
-        return null;
+    public List<Board> getAllUserBoards(UUID userId) {
+        final String q = "SELECT id,name,description FROM boards INNER JOIN users_boards ON (users_boards.board_id = boards.id) WHERE users_boards.user_id=?";
+        return jdbcTemplate.query(q, (resultSet, i) -> {
+            UUID uuid = UUID.fromString(resultSet.getString("id"));
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            return new Board(uuid, name,description);
+        }, userId);
     }
 
     @Override

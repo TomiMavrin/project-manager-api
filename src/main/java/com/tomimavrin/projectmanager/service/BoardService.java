@@ -23,8 +23,8 @@ public class BoardService {
         return this.boardDao.createBoard(board, userId);
     }
 
-    public List<Board> getAllUserBoards(){
-        return boardDao.getAllUserBoards();
+    public List<Board> getAllUserBoards(UUID id){
+        return boardDao.getAllUserBoards(id);
     }
 
     public int deleteBoard(UUID id){

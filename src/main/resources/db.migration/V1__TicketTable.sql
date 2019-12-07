@@ -25,3 +25,5 @@ CREATE TABLE USERS_BOARDS (
     board_id UUID NOT NULL REFERENCES BOARDS(id),
     PRIMARY KEY (user_id, board_id)
 );
+
+SELECT id,name,description FROM boards INNER JOIN users_boards ON (users_boards.board_id = boards.id) WHERE users_boards.user_id=?;

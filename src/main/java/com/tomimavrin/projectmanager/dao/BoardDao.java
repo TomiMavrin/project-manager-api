@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface BoardDao {
     int createBoard(Board board, UUID userId);
 
-    List<Board> getAllUserBoards();
+    List<Board> getAllUserBoards(UUID userId);
 
     Optional<Board> getBoard(UUID boardID);
 
