@@ -35,7 +35,7 @@ public class BoardController {
         this.columnService = columnService;
     }
 
-    @PostMapping("/user/create_board")
+    @PostMapping("/board/create")
     public Response createBoard(@RequestBody Board board){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
@@ -49,7 +49,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/user/get_boards")
+    @GetMapping("/user/boards")
     public List<Board> getAllUserBoards(){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
@@ -75,7 +75,24 @@ public class BoardController {
     }
 
     @PostMapping("/column/create")
-    public int createColumn(@RequestBody Column column){
-        return this.columnService.createColumn(column);
+    public Response createColumn(@RequestBody Column column){
+        int result =  this.columnService.createColumn(column);
+        if(result == 1){
+            return new Response("success", "Column successfully created!");
+        }
+        else {
+            return new Response("failure", "Failed to create a column!");
+        }
+    }
+
+    @PostMapping("/ticket/create")
+    public Response createTicket(@RequestBody Ticket ticket){
+       int result = this.ticketService.createTicket(ticket);
+       if(result == 1){
+           return new Response("success", "Ticket successfully created!");
+       }
+       else {
+           return new Response("failure", "Failed to create a ticket!");
+       }
     }
 }

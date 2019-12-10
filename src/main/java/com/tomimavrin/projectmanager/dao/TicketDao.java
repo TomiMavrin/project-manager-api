@@ -12,8 +12,6 @@ public interface TicketDao {
 
     List<Ticket> getColumnTickets(UUID columnId);
 
-    Optional<Ticket> getTicket(UUID ticketID);
-
     int editTicket(UUID ticketId);
 
     int deleteTicket(UUID ticketId);

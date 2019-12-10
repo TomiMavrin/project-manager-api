@@ -40,11 +40,6 @@ public class TicketDataAccessService implements TicketDao {
     }
 
     @Override
-    public Optional<Ticket> getTicket(UUID ticketID) {
-        return Optional.empty();
-    }
-
-    @Override
     public int editTicket(UUID ticketId) {
         return 0;
     }
