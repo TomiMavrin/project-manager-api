@@ -1,10 +1,10 @@
 package com.tomimavrin.projectmanager.dao;
 
 import com.tomimavrin.projectmanager.model.Ticket;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,21 +20,23 @@ public class TicketDataAccessService implements TicketDao {
 
 
     @Override
-    public int createTicket(UUID id, Ticket ticket) {
-        final String q = "INSERT INTO TICKETS (id, title, description, priority) VALUES(?, ?, ?, ?)";
-        return jdbcTemplate.update(q, id,ticket.getTitle(), ticket.getDescription(), ticket.getPriority());
+    public int createTicket(Ticket ticket) {
+        final String q = "INSERT INTO TICKETS (column_id, title, description, created_by) VALUES(?, ?, ?, ?)";
+        return jdbcTemplate.update(q, ticket.getColumnId(),ticket.getTitle(), ticket.getDescription(), ticket.getCreatedBy());
     }
 
     @Override
-    public List<Ticket> getAllTickets() {
-        final String q = "SELECT * FROM TICKETS";
+    public List<Ticket> getColumnTickets(String columnId) {
+        final String q = "SELECT * FROM TICKETS WHERE column_id = ?";
         return jdbcTemplate.query(q, (resultSet, i) -> {
             UUID uuid = UUID.fromString(resultSet.getString("id"));
+            UUID column = UUID.fromString(resultSet.getString("column_id"));
             String title = resultSet.getString("title");
             String description = resultSet.getString("description");
-            int priority = resultSet.getInt("priority");
-            return new Ticket(uuid, title,description, priority);
-        });
+            Timestamp date_created = resultSet.getTimestamp("date_created");
+            UUID created_by = UUID.fromString(resultSet.getString("created_by"));
+            return new Ticket(uuid, title,description, date_created, column, created_by);
+        }, columnId);
     }
 
     @Override

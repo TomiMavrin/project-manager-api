@@ -27,3 +27,27 @@ CREATE TABLE USERS_BOARDS (
 );
 
 SELECT id,name,description FROM boards INNER JOIN users_boards ON (users_boards.board_id = boards.id) WHERE users_boards.user_id=?;
+
+CREATE TABLE COLUMNS (
+    id UUID DEFAULT uuid_generate_v4 (),
+    name VARCHAR(25),
+    category VARCHAR(20),
+    board_id UUID NOT NULL REFERENCES BOARDS(id),
+    PRIMARY KEY (id)
+);
+
+
+
+
+CREATE TABLE TICKETS (
+    id UUID DEFAULT uuid_generate_v4 (),
+    title VARCHAR(50) NOT NULL,
+    description VARCHAR(150),
+    date_created TIMESTAMP DEFAULT current_timestamp,
+    column_id UUID NOT NULL REFERENCES COLUMNS(id),
+    created_by UUID NOT NULL REFERENCES USERS(id),
+    PRIMARY KEY (id)
+);
+
+
+INSERT INTO tickets (title,description,created_by) VALUES ('test', 'desc', '5f270bcc-62d1-419f-974d-b04ec15cc3be');

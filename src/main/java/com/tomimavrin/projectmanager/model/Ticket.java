@@ -3,7 +3,7 @@ package com.tomimavrin.projectmanager.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Ticket {
@@ -13,16 +13,22 @@ public class Ticket {
     @NotBlank
     private final String title;
     private final String description;
-    private final int priority;
+    private final Timestamp dateCreated;
+    private final UUID columnId;
+    private final UUID createdBy;
 
     public Ticket(@JsonProperty("id") UUID id,
                   @JsonProperty("title") String title,
                   @JsonProperty("description") String description,
-                  @JsonProperty("priority") int priority) {
+                  @JsonProperty("date_created") Timestamp dateCreated,
+                  @JsonProperty("column_id") UUID columnId,
+                  @JsonProperty("created_by")UUID createdBy) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.priority = priority;
+        this.dateCreated = dateCreated;
+        this.columnId = columnId;
+        this.createdBy = createdBy;
     }
 
     public UUID getId() {
@@ -37,7 +43,15 @@ public class Ticket {
         return description;
     }
 
-    public int getPriority() {
-        return priority;
+    public Timestamp getDateCreated() {
+        return dateCreated;
+    }
+
+    public UUID getColumnId() {
+        return columnId;
+    }
+
+    public UUID getCreatedBy() {
+        return createdBy;
     }
 }

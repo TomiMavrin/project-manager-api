@@ -7,13 +7,13 @@ public class Column {
 
     private final UUID id;
     private final String name;
-    private final String color;
+    private final String category;
     private final List<Ticket> tickets;
 
     public Column(UUID id, String name, String color, List<Ticket> tickets) {
         this.id = id;
         this.name = name;
-        this.color = color;
+        this.category = color;
         this.tickets = tickets;
     }
 
@@ -25,8 +25,8 @@ public class Column {
         return name;
     }
 
-    public String getColor() {
-        return color;
+    public String getCategory() {
+        return category;
     }
 
     public List<Ticket> getTickets() {

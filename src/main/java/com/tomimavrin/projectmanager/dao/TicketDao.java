@@ -8,14 +8,9 @@ import java.util.UUID;
 
 public interface TicketDao {
 
-    int createTicket(UUID id, Ticket ticket);
+    int createTicket(Ticket ticket);
 
-    default int createTicket(Ticket ticket){
-        UUID id = UUID.randomUUID();
-        return createTicket(id, ticket);
-    };
-
-    List<Ticket> getAllTickets();
+    List<Ticket> getColumnTickets(String columnId);
 
     Optional<Ticket> getTicket(UUID ticketID);
 

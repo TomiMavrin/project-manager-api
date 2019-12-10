@@ -1,10 +1,12 @@
 package com.tomimavrin.projectmanager.controller;
 
 import com.tomimavrin.projectmanager.model.Board;
+import com.tomimavrin.projectmanager.model.Column;
 import com.tomimavrin.projectmanager.model.Ticket;
 import com.tomimavrin.projectmanager.model.User;
 import com.tomimavrin.projectmanager.response.Response;
 import com.tomimavrin.projectmanager.service.BoardService;
+import com.tomimavrin.projectmanager.service.ColumnService;
 import com.tomimavrin.projectmanager.service.TicketService;
 import com.tomimavrin.projectmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,27 +28,29 @@ public class BoardController {
     private final TicketService ticketService;
     private final UserService userService;
     private final BoardService boardService;
+    private final ColumnService columnService;
 
     @Autowired
-    public BoardController(TicketService ticketService, UserService userService, BoardService boardService) {
+    public BoardController(TicketService ticketService, UserService userService, BoardService boardService, ColumnService columnService) {
         this.ticketService = ticketService;
         this.userService = userService;
         this.boardService = boardService;
+        this.columnService = columnService;
     }
 
 
-    @PostMapping("/createTicket")
+    @PostMapping("/column/create_ticket")
     public void createTicket(@RequestBody Ticket ticket){
         ticketService.createTicket(ticket);
     }
 
-    @GetMapping("/getAllTickets")
-    public List<Ticket> getAllTickets(){
-        return ticketService.getAllTickets();
+    @PostMapping("/column/tickets")
+    public List<Ticket> getBoardTickets(@RequestBody String columnId){
+        return ticketService.getColumnTickets(columnId);
     }
 
 
-    @PostMapping("/createBoard")
+    @PostMapping("/user/create_board")
     public Response createBoard(@RequestBody Board board){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
@@ -60,11 +64,16 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/getAllUserBoards")
+    @GetMapping("/user/get_boards")
     public List<Board> getAllUserBoards(){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
         UUID userId = user.get().getId();
         return boardService.getAllUserBoards(userId);
+    }
+
+    @PostMapping("/column/create")
+    public int createColumn(@RequestBody Column column){
+        return this.columnService.createColumn(column);
     }
 }
