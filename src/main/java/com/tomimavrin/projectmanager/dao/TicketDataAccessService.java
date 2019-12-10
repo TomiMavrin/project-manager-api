@@ -26,7 +26,7 @@ public class TicketDataAccessService implements TicketDao {
     }
 
     @Override
-    public List<Ticket> getColumnTickets(String columnId) {
+    public List<Ticket> getColumnTickets(UUID columnId) {
         final String q = "SELECT * FROM TICKETS WHERE column_id = ?";
         return jdbcTemplate.query(q, (resultSet, i) -> {
             UUID uuid = UUID.fromString(resultSet.getString("id"));

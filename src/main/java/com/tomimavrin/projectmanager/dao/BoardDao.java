@@ -11,7 +11,9 @@ public interface BoardDao {
 
     List<Board> getAllUserBoards(UUID userId);
 
-    Optional<Board> getBoard(UUID boardID);
+    boolean checkBoard(UUID boardId, UUID userId);
+
+    Board getBoard(UUID boardID);
 
     int editBoard(UUID boardID);
 

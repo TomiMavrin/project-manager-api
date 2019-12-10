@@ -31,7 +31,7 @@ SELECT id,name,description FROM boards INNER JOIN users_boards ON (users_boards.
 CREATE TABLE COLUMNS (
     id UUID DEFAULT uuid_generate_v4 (),
     name VARCHAR(25),
-    category VARCHAR(20),
+    color VARCHAR(20),
     board_id UUID NOT NULL REFERENCES BOARDS(id),
     PRIMARY KEY (id)
 );

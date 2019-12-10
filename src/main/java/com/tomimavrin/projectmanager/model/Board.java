@@ -8,6 +8,7 @@ public class Board {
     private final UUID id;
     private final String name;
     private final String description;
+    private List<Column> columnList;
 
     public Board(UUID id, String name, String description) {
         this.id = id;
@@ -25,5 +26,13 @@ public class Board {
 
     public UUID getId() {
         return id;
+    }
+
+    public List<Column> getColumnList() {
+        return columnList;
+    }
+
+    public void setColumnList(List<Column> columnList) {
+        this.columnList = columnList;
     }
 }

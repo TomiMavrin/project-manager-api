@@ -10,7 +10,7 @@ public interface TicketDao {
 
     int createTicket(Ticket ticket);
 
-    List<Ticket> getColumnTickets(String columnId);
+    List<Ticket> getColumnTickets(UUID columnId);
 
     Optional<Ticket> getTicket(UUID ticketID);
 

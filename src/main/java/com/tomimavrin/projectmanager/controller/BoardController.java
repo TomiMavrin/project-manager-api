@@ -12,10 +12,7 @@ import com.tomimavrin.projectmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,18 +35,6 @@ public class BoardController {
         this.columnService = columnService;
     }
 
-
-    @PostMapping("/column/create_ticket")
-    public void createTicket(@RequestBody Ticket ticket){
-        ticketService.createTicket(ticket);
-    }
-
-    @PostMapping("/column/tickets")
-    public List<Ticket> getBoardTickets(@RequestBody String columnId){
-        return ticketService.getColumnTickets(columnId);
-    }
-
-
     @PostMapping("/user/create_board")
     public Response createBoard(@RequestBody Board board){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
@@ -70,6 +55,23 @@ public class BoardController {
         Optional<User> user = userService.getUser(auth.getName());
         UUID userId = user.get().getId();
         return boardService.getAllUserBoards(userId);
+    }
+
+
+    @GetMapping("/user/board")
+    public Board getBoard(@RequestParam UUID boardId){
+        Board board = null;
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.getUser(auth.getName());
+        UUID userId = user.get().getId();
+        if(this.boardService.checkBoard(boardId,userId)){
+            board = this.boardService.getBoard(boardId);
+            board.setColumnList(this.columnService.getBoardColumns(boardId));
+            for (Column column: board.getColumnList()) {
+                column.setTickets(this.ticketService.getColumnTickets(column.getId()));
+            }
+        }
+        return board;
     }
 
     @PostMapping("/column/create")

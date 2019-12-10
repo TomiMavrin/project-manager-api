@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,14 @@ public class BoardService {
 
     public List<Board> getAllUserBoards(UUID id){
         return boardDao.getAllUserBoards(id);
+    }
+
+    public boolean checkBoard(UUID boardId, UUID userId){
+        return this.boardDao.checkBoard(boardId, userId);
+    }
+
+    public Board getBoard(UUID boardId){
+        return this.boardDao.getBoard(boardId);
     }
 
     public int deleteBoard(UUID id){

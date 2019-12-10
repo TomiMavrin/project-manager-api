@@ -38,8 +38,24 @@ public class BoardDataAccessService implements BoardDao {
     }
 
     @Override
-    public Optional<Board> getBoard(UUID boardID) {
-        return Optional.empty();
+    public boolean checkBoard(UUID boardId, UUID userId) {
+        int count = 0;
+        final String q = "SELECT count(*) FROM users_boards WHERE board_id = ? AND user_id=?";
+        List<String> list = jdbcTemplate.query(q, (resultSet, i) -> {
+            return "-";
+        },boardId, userId);
+        return list.size() > 0;
+    }
+
+    @Override
+    public Board getBoard(UUID boardID) {
+        final String query = "SELECT * FROM boards WHERE id = ?";
+        return jdbcTemplate.queryForObject(query, new Object[]{boardID}, (rs, rowNum) ->
+                new Board(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("name"),
+                        rs.getString("description")
+                ));
     }
 
     @Override
