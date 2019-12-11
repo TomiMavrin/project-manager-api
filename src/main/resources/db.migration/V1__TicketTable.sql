@@ -51,3 +51,17 @@ CREATE TABLE TICKETS (
 
 
 INSERT INTO tickets (title,description,created_by) VALUES ('test', 'desc', '5f270bcc-62d1-419f-974d-b04ec15cc3be');
+
+BEGIN;
+CREATE TEMPORARY TABLE bid (id UUID) ON COMMIT DROP;
+WITH rows AS (
+    INSERT INTO boards (name, description) VALUES (?, ?) RETURNING id)
+    INSERT INTO bid (id) SELECT id FROM rows;
+    INSERT INTO users_boards (board_id, user_id) SELECT id, ? from bid;
+    INSERT INTO columns (name, board_id) SELECT ?, id from bid;
+    INSERT INTO columns (name, board_id) SELECT ?, id from bid;
+    INSERT INTO columns (name, board_id) SELECT ?, id from bid;
+COMMIT;
+
+INSERT INTO TICKETS (column_id, title, description, created_by) VALUES('de559667-5ee8-484a-9179-0c12da97c3e4', 'test1', 'test1', '117df756-8a8f-4535-a4d1-0e69beda098c') RETURNING id,title,description,date_created,column_id,created_by;
+

@@ -20,10 +20,17 @@ public class BoardDataAccessService implements BoardDao {
 
     @Override
     public int createBoard(Board board, UUID userId) {
-        final String transaction ="BEGIN; WITH rows AS ( " +
-                "INSERT INTO boards (name, description) VALUES (?, ?) RETURNING id)" +
-                "INSERT INTO users_boards (board_id, user_id) SELECT id, ? from rows; COMMIT;";
-        return jdbcTemplate.update(transaction , board.getName(),board.getDescription(), userId );
+        final String transaction ="BEGIN;" +
+        "CREATE TEMPORARY TABLE bid (id UUID) ON COMMIT DROP; " +
+        "WITH rows AS ( " +
+        "INSERT INTO boards (name, description) VALUES (?, ?) RETURNING id)" +
+        "INSERT INTO bid (id) SELECT id FROM rows; " +
+        "INSERT INTO users_boards (board_id, user_id) SELECT id, ? from bid; " +
+        "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
+        "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
+        "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
+        "COMMIT;";
+        return jdbcTemplate.update(transaction , board.getName(),board.getDescription(), userId, "To Do", "In Progress", "Done" );
     }
 
     @Override

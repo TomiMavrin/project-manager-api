@@ -86,13 +86,10 @@ public class BoardController {
     }
 
     @PostMapping("/ticket/create")
-    public Response createTicket(@RequestBody Ticket ticket){
-       int result = this.ticketService.createTicket(ticket);
-       if(result == 1){
-           return new Response("success", "Ticket successfully created!");
-       }
-       else {
-           return new Response("failure", "Failed to create a ticket!");
-       }
+    public Ticket createTicket(@RequestBody Ticket ticket){
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.getUser(auth.getName());
+        UUID userId = user.get().getId();
+        return this.ticketService.createTicket(ticket, userId);
     }
 }

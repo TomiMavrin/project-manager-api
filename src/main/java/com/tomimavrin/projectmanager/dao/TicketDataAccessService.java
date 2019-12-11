@@ -1,12 +1,12 @@
 package com.tomimavrin.projectmanager.dao;
 
+import com.tomimavrin.projectmanager.model.Board;
 import com.tomimavrin.projectmanager.model.Ticket;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("tickets")
@@ -20,9 +20,18 @@ public class TicketDataAccessService implements TicketDao {
 
 
     @Override
-    public int createTicket(Ticket ticket) {
-        final String q = "INSERT INTO TICKETS (column_id, title, description, created_by) VALUES(?, ?, ?, ?)";
-        return jdbcTemplate.update(q, ticket.getColumnId(),ticket.getTitle(), ticket.getDescription(), ticket.getCreatedBy());
+    public Ticket createTicket(Ticket ticket, UUID userId) {
+        final String q = "INSERT INTO TICKETS (column_id, title, description, created_by) VALUES(?, ?, ?, ?) " +
+                "RETURNING id,title,description,date_created,column_id,created_by";
+        return jdbcTemplate.query(q, (rs, rowNum) ->
+                new Ticket(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getTimestamp("date_created"),
+                        UUID.fromString(rs.getString("column_id")),
+                        UUID.fromString(rs.getString("created_by"))
+                ), ticket.getColumn_id(),ticket.getTitle(), ticket.getDescription(), userId).get(0);
     }
 
     @Override

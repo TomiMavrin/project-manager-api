@@ -2,33 +2,30 @@ package com.tomimavrin.projectmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Ticket {
 
     private final UUID id;
-
-    @NotBlank
     private final String title;
     private final String description;
-    private final Timestamp dateCreated;
-    private final UUID columnId;
-    private final UUID createdBy;
+    private final Timestamp date_created;
+    private final UUID column_id;
+    private final UUID created_by;
 
     public Ticket(@JsonProperty("id") UUID id,
                   @JsonProperty("title") String title,
                   @JsonProperty("description") String description,
-                  @JsonProperty("date_created") Timestamp dateCreated,
-                  @JsonProperty("column_id") UUID columnId,
-                  @JsonProperty("created_by")UUID createdBy) {
+                  @JsonProperty("date_created") Timestamp date_created,
+                  @JsonProperty("column_id") UUID column_id,
+                  @JsonProperty("created_by")UUID created_by) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.dateCreated = dateCreated;
-        this.columnId = columnId;
-        this.createdBy = createdBy;
+        this.date_created = date_created;
+        this.column_id = column_id;
+        this.created_by = created_by;
     }
 
     public UUID getId() {
@@ -43,15 +40,15 @@ public class Ticket {
         return description;
     }
 
-    public Timestamp getDateCreated() {
-        return dateCreated;
+    public Timestamp getDate_created() {
+        return date_created;
     }
 
-    public UUID getColumnId() {
-        return columnId;
+    public UUID getColumn_id() {
+        return column_id;
     }
 
-    public UUID getCreatedBy() {
-        return createdBy;
+    public UUID getCreated_by() {
+        return created_by;
     }
 }

@@ -19,8 +19,8 @@ public class TicketService {
         this.ticketDao = ticketDao;
     }
 
-    public int createTicket(Ticket ticket){
-        return this.ticketDao.createTicket(ticket);
+    public Ticket createTicket(Ticket ticket, UUID userId){
+        return this.ticketDao.createTicket(ticket, userId);
     }
 
     public List<Ticket> getColumnTickets(UUID columnId){

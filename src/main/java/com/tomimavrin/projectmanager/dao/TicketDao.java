@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface TicketDao {
 
-    int createTicket(Ticket ticket);
+    Ticket createTicket(Ticket ticket, UUID userId);
 
     List<Ticket> getColumnTickets(UUID columnId);
 
