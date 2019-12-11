@@ -15,4 +15,6 @@ public interface TicketDao {
     int editTicket(UUID ticketId);
 
     int deleteTicket(UUID ticketId);
+
+    Ticket moveTicket(Ticket ticket);
 }

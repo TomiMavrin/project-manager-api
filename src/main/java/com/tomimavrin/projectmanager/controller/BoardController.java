@@ -92,4 +92,9 @@ public class BoardController {
         UUID userId = user.get().getId();
         return this.ticketService.createTicket(ticket, userId);
     }
+
+    @PostMapping("/ticket/move")
+    public Ticket moveTicket(@RequestBody Ticket ticket){
+        return this.ticketService.moveTicket(ticket);
+    }
 }

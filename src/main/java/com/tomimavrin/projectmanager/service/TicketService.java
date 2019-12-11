@@ -35,5 +35,8 @@ public class TicketService {
         return this.ticketDao.editTicket(id);
     }
 
+    public Ticket moveTicket(Ticket ticket){
+        return this.ticketDao.moveTicket(ticket);
+    }
 
 }

@@ -57,4 +57,19 @@ public class TicketDataAccessService implements TicketDao {
     public int deleteTicket(UUID ticketId) {
         return 0;
     }
+
+    @Override
+    public Ticket moveTicket(Ticket ticket) {
+        final String updateQ = "UPDATE tickets SET column_id=? WHERE id = ? "+
+                "RETURNING id,title,description,date_created,column_id,created_by";
+        return jdbcTemplate.query(updateQ, (rs, rowNum) ->
+                new Ticket(
+                        UUID.fromString(rs.getString("id")),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getTimestamp("date_created"),
+                        UUID.fromString(rs.getString("column_id")),
+                        UUID.fromString(rs.getString("created_by"))
+                ), ticket.getColumn_id(), ticket.getId()).get(0);
+    }
 }
