@@ -97,4 +97,15 @@ public class BoardController {
     public Ticket moveTicket(@RequestBody Ticket ticket){
         return this.ticketService.moveTicket(ticket);
     }
+
+    @PostMapping("/ticket/delete")
+    public Response deleteTicket(@RequestParam UUID ticketId){
+        int result =  this.ticketService.deleteTicket(ticketId);
+        if(result == 1){
+            return new Response("success", "Column successfully deleted!");
+        }
+        else {
+            return new Response("failure", "Failed to delete a column!");
+        }
+    }
 }

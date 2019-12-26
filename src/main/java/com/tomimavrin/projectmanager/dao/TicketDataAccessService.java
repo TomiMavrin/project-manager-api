@@ -55,7 +55,8 @@ public class TicketDataAccessService implements TicketDao {
 
     @Override
     public int deleteTicket(UUID ticketId) {
-        return 0;
+        final String query = "DELETE FROM tickets WHERE id = ?";
+        return jdbcTemplate.update(query, ticketId);
     }
 
     @Override
