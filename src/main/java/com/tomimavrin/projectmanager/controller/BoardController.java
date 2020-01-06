@@ -42,10 +42,10 @@ public class BoardController {
         UUID userId = user.get().getId();
         int result = boardService.createBoard(board, userId);
         if(result == 1){
-            return new Response("failure", "Something went wrong.");
+            return new Response("success", "Board successfully created");
         }
         else{
-            return new Response("success", "Board successfully created");
+            return new Response("failure", "Something went wrong.");
         }
     }
 
@@ -75,13 +75,18 @@ public class BoardController {
     }
 
     @PostMapping("/column/create")
-    public Response createColumn(@RequestBody Column column){
-        int result =  this.columnService.createColumn(column);
-        if(result == 1){
-            return new Response("success", "Column successfully created!");
+    public Column createColumn(@RequestBody Column column){
+        return this.columnService.createColumn(column);
+    }
+
+    @PostMapping("/column/delete")
+    public Response deleteColumn(@RequestParam UUID columnId){
+        int response =  this.columnService.deleteColumn(columnId);
+        if(response == 1){
+            return new Response("success", "Column successfully deleted");
         }
-        else {
-            return new Response("failure", "Failed to create a column!");
+        else{
+            return new Response("failure", "Something went wrong.");
         }
     }
 
@@ -102,10 +107,10 @@ public class BoardController {
     public Response deleteTicket(@RequestParam UUID ticketId){
         int result =  this.ticketService.deleteTicket(ticketId);
         if(result == 1){
-            return new Response("success", "Column successfully deleted!");
+            return new Response("success", "Ticket successfully deleted!");
         }
         else {
-            return new Response("failure", "Failed to delete a column!");
+            return new Response("failure", "Failed to delete a ticket!");
         }
     }
 }

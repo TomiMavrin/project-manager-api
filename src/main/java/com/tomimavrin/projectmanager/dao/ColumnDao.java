@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface ColumnDao {
 
-    int createColumn(Column column);
+    Column createColumn(Column column);
 
     List<Column> getBoardColumns(UUID boardId);
 

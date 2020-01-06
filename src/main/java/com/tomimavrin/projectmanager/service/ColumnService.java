@@ -18,7 +18,7 @@ public class ColumnService {
         this.columnDao = columnDao;
     }
 
-    public int createColumn(Column column){
+    public Column createColumn(Column column){
         return this.columnDao.createColumn(column);
     }
 
