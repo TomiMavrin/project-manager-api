@@ -44,7 +44,7 @@ CREATE TABLE TICKETS (
     title VARCHAR(50) NOT NULL,
     description VARCHAR(150),
     date_created TIMESTAMP DEFAULT current_timestamp,
-    column_id UUID NOT NULL REFERENCES COLUMNS(id),
+    column_id UUID NOT NULL REFERENCES COLUMNS(id) ON DELETE CASCADE,
     created_by UUID NOT NULL REFERENCES USERS(id),
     PRIMARY KEY (id)
 );

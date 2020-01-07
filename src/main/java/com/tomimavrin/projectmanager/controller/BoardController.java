@@ -49,6 +49,20 @@ public class BoardController {
         }
     }
 
+    @PostMapping("/board/delete")
+    public Response deleteBoard(@RequestParam UUID boardId){
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> user = userService.getUser(auth.getName());
+        UUID userId = user.get().getId();
+        int result = boardService.deleteBoard(boardId,userId);
+        if(result == 1){
+            return new Response("success", "Board successfully created");
+        }
+        else{
+            return new Response("failure", "Something went wrong.");
+        }
+    }
+
     @GetMapping("/user/boards")
     public List<Board> getAllUserBoards(){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();

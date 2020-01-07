@@ -36,8 +36,8 @@ public class BoardService {
         return this.boardDao.getBoard(boardId);
     }
 
-    public int deleteBoard(UUID id){
-        return this.boardDao.deleteBoard(id);
+    public int deleteBoard(UUID boardId, UUID userId){
+        return this.boardDao.deleteBoard(boardId, userId);
     }
 
     public int editBoard(UUID id){

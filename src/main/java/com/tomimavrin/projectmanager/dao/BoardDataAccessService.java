@@ -71,7 +71,12 @@ public class BoardDataAccessService implements BoardDao {
     }
 
     @Override
-    public int deleteBoard(UUID boardID) {
-        return 0;
+    public int deleteBoard(UUID boardID, UUID userId) {
+        String action = "BEGIN;" +
+                "DELETE FROM users_boards WHERE board_id=? AND user_id=?;" +
+                "DELETE FROM columns where board_id=?;" +
+                "DELETE FROM boards WHERE id=?;" +
+                "COMMIT;";
+        return jdbcTemplate.update(action, boardID, userId, boardID, boardID);
     }
 }
