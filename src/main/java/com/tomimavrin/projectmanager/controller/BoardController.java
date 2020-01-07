@@ -41,7 +41,7 @@ public class BoardController {
         Optional<User> user = userService.getUser(auth.getName());
         UUID userId = user.get().getId();
         int result = boardService.createBoard(board, userId);
-        if(result == 1){
+        if(result == 0){
             return new Response("success", "Board successfully created");
         }
         else{
