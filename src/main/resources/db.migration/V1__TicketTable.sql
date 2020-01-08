@@ -36,16 +36,17 @@ CREATE TABLE COLUMNS (
     PRIMARY KEY (id)
 );
 
-
-
-
 CREATE TABLE TICKETS (
     id UUID DEFAULT uuid_generate_v4 (),
-    title VARCHAR(50) NOT NULL,
+    title VARCHAR(20) NOT NULL,
+    subtitle VARCHAR(35),
     description VARCHAR(150),
     date_created TIMESTAMP DEFAULT current_timestamp,
+    date_due TIMESTAMP,
     column_id UUID NOT NULL REFERENCES COLUMNS(id) ON DELETE CASCADE,
     created_by UUID NOT NULL REFERENCES USERS(id),
+    assigned_to UUID REFERENCES USERS(id),
+    color VARCHAR(7) NOT NULL,
     PRIMARY KEY (id)
 );
 

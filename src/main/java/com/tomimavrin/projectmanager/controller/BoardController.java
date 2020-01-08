@@ -106,6 +106,7 @@ public class BoardController {
 
     @PostMapping("/ticket/create")
     public Ticket createTicket(@RequestBody Ticket ticket){
+        System.out.println(ticket.toString());
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
         UUID userId = user.get().getId();

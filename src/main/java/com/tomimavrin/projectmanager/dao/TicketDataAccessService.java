@@ -1,6 +1,5 @@
 package com.tomimavrin.projectmanager.dao;
 
-import com.tomimavrin.projectmanager.model.Board;
 import com.tomimavrin.projectmanager.model.Ticket;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,17 +20,20 @@ public class TicketDataAccessService implements TicketDao {
 
     @Override
     public Ticket createTicket(Ticket ticket, UUID userId) {
-        final String q = "INSERT INTO TICKETS (column_id, title, description, created_by) VALUES(?, ?, ?, ?) " +
-                "RETURNING id,title,description,date_created,column_id,created_by";
+        final String q = "INSERT INTO TICKETS (column_id, title, subtitle, description, color, date_due, created_by, assigned_to) VALUES(?, ?, ?, ?, ?, ?, ?, ?) " +
+                "RETURNING id,title,subtitle,description,color,date_created,date_due,column_id,created_by,assigned_to";
         return jdbcTemplate.query(q, (rs, rowNum) ->
                 new Ticket(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("title"),
-                        rs.getString("description"),
+                        rs.getString("subtitle"), rs.getString("description"),
+                        rs.getString("color"),
                         rs.getTimestamp("date_created"),
+                        rs.getTimestamp("date_due"),
                         UUID.fromString(rs.getString("column_id")),
+                        UUID.fromString(rs.getString("created_by")),
                         UUID.fromString(rs.getString("created_by"))
-                ), ticket.getColumn_id(),ticket.getTitle(), ticket.getDescription(), userId).get(0);
+                ), ticket.getColumn_id(),ticket.getTitle(), ticket.getSubtitle(), ticket.getDescription(),ticket.getColor(), ticket.getDate_due(), userId, ticket.getAssigned_to()).get(0);
     }
 
     @Override
@@ -41,10 +43,14 @@ public class TicketDataAccessService implements TicketDao {
             UUID uuid = UUID.fromString(resultSet.getString("id"));
             UUID column = UUID.fromString(resultSet.getString("column_id"));
             String title = resultSet.getString("title");
+            String subtitle = resultSet.getString("subtitle");
             String description = resultSet.getString("description");
+            String color = resultSet.getString("color");
             Timestamp date_created = resultSet.getTimestamp("date_created");
+            Timestamp date_due = resultSet.getTimestamp("date_due");
             UUID created_by = UUID.fromString(resultSet.getString("created_by"));
-            return new Ticket(uuid, title,description, date_created, column, created_by);
+            UUID assigned_to = UUID.fromString(resultSet.getString("created_by"));
+            return new Ticket(uuid, title, subtitle, description, color, date_created, date_due, column, created_by, assigned_to);
         }, columnId);
     }
 
@@ -67,10 +73,14 @@ public class TicketDataAccessService implements TicketDao {
                 new Ticket(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("title"),
+                        rs.getString("subtitle"),
                         rs.getString("description"),
+                        rs.getString("color"),
                         rs.getTimestamp("date_created"),
+                        rs.getTimestamp("date_due"),
                         UUID.fromString(rs.getString("column_id")),
-                        UUID.fromString(rs.getString("created_by"))
+                        UUID.fromString(rs.getString("created_by")),
+                        UUID.fromString(rs.getString("assigned_to"))
                 ), ticket.getColumn_id(), ticket.getId()).get(0);
     }
 }
