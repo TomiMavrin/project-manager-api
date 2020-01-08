@@ -19,15 +19,14 @@ public class ColumnDataAccessService implements ColumnDao {
 
     @Override
     public Column createColumn(Column column) {
-        final String q ="INSERT INTO columns (name, color, board_id) VALUES(?, ?, ?)" +
-                "RETURNING id,name,color,board_id";
+        final String q ="INSERT INTO columns (name, board_id) VALUES(?, ?)" +
+                "RETURNING id,name,board_id";
         return jdbcTemplate.query(q, (rs, rowNum) ->
                 new Column(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("name"),
-                        rs.getString("color"),
                         UUID.fromString(rs.getString("board_id"))
-                ), column.getName(), column.getName(), column.getBoard_id()).get(0);
+                ), column.getName(), column.getBoard_id()).get(0);
     }
 
     @Override
@@ -36,8 +35,7 @@ public class ColumnDataAccessService implements ColumnDao {
         return jdbcTemplate.query(query, (resultSet, i) -> {
             UUID uuid = UUID.fromString(resultSet.getString("id"));
             String name = resultSet.getString("name");
-            String category = resultSet.getString("color");
-            return new Column(uuid, name,category, boardId);
+            return new Column(uuid, name, boardId);
         }, boardId);
     }
 
