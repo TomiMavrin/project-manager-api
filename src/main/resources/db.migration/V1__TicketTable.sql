@@ -66,3 +66,7 @@ COMMIT;
 INSERT INTO TICKETS (column_id, title, description, created_by) VALUES('de559667-5ee8-484a-9179-0c12da97c3e4', 'test1', 'test1', '117df756-8a8f-4535-a4d1-0e69beda098c') RETURNING id,title,description,date_created,column_id,created_by;
 
 UPDATE tickets SET column_id='72ace237-d5af-42b0-b749-6ffd9d64756e' WHERE id ='a2d10649-9152-472c-8c0b-34e8c3003822';
+
+-----DOCKER RESET IMAGE AND RUN
+--    cd Repositories/Java/project-manager-api/ && docker stop api && docker rm api && docker run -d -p 8080:8080 --name api api
+
