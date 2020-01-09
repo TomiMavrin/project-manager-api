@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository("tickets")
@@ -22,8 +23,13 @@ public class TicketDataAccessService implements TicketDao {
     public Ticket createTicket(Ticket ticket, UUID userId) {
         final String q = "INSERT INTO TICKETS (column_id, title, subtitle, description, color, date_due, created_by, assigned_to) VALUES(?, ?, ?, ?, ?, ?, ?, ?) " +
                 "RETURNING id,title,subtitle,description,color,date_created,date_due,column_id,created_by,assigned_to";
-        return jdbcTemplate.query(q, (rs, rowNum) ->
-                new Ticket(
+        return jdbcTemplate.query(q, (rs, rowNum) -> {
+                String assignedString = rs.getString("assigned_to");
+                UUID assigned_to = null;
+                if(assignedString != null){
+                    assigned_to = UUID.fromString(assignedString);
+                }
+                return new Ticket(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("title"),
                         rs.getString("subtitle"), rs.getString("description"),
@@ -32,8 +38,9 @@ public class TicketDataAccessService implements TicketDao {
                         rs.getTimestamp("date_due"),
                         UUID.fromString(rs.getString("column_id")),
                         UUID.fromString(rs.getString("created_by")),
-                        UUID.fromString(rs.getString("assigned_to"))
-                ), ticket.getColumn_id(),ticket.getTitle(), ticket.getSubtitle(), ticket.getDescription(),ticket.getColor(), ticket.getDate_due(), userId, ticket.getAssigned_to()).get(0);
+                        assigned_to
+                );
+            }, ticket.getColumn_id(),ticket.getTitle(), ticket.getSubtitle(), ticket.getDescription(),ticket.getColor(), ticket.getDate_due(), userId, ticket.getAssigned_to()).get(0);
     }
 
     @Override
@@ -49,7 +56,11 @@ public class TicketDataAccessService implements TicketDao {
             Timestamp date_created = resultSet.getTimestamp("date_created");
             Timestamp date_due = resultSet.getTimestamp("date_due");
             UUID created_by = UUID.fromString(resultSet.getString("created_by"));
-            UUID assigned_to = UUID.fromString(resultSet.getString("created_by"));
+            String assignedString = resultSet.getString("assigned_to");
+            UUID assigned_to = null;
+            if(assignedString != null){
+                assigned_to = UUID.fromString(assignedString);
+            }
             return new Ticket(uuid, title, subtitle, description, color, date_created, date_due, column, created_by, assigned_to);
         }, columnId);
     }
@@ -68,9 +79,14 @@ public class TicketDataAccessService implements TicketDao {
     @Override
     public Ticket moveTicket(Ticket ticket) {
         final String updateQ = "UPDATE tickets SET column_id=? WHERE id = ? "+
-                "RETURNING id,title,description,date_created,column_id,created_by";
-        return jdbcTemplate.query(updateQ, (rs, rowNum) ->
-                new Ticket(
+                "RETURNING id,title,description,date_created,column_id,created_by,subtitle, assigned_to";
+        return jdbcTemplate.query(updateQ, (rs, rowNum) ->{
+                String assignedString = rs.getString("assigned_to");
+                UUID assigned_to = null;
+                if(assignedString != null){
+                    assigned_to = UUID.fromString(assignedString);
+                }
+                return new Ticket(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("title"),
                         rs.getString("subtitle"),
@@ -80,7 +96,8 @@ public class TicketDataAccessService implements TicketDao {
                         rs.getTimestamp("date_due"),
                         UUID.fromString(rs.getString("column_id")),
                         UUID.fromString(rs.getString("created_by")),
-                        UUID.fromString(rs.getString("assigned_to"))
-                ), ticket.getColumn_id(), ticket.getId()).get(0);
+                        assigned_to
+                );
+            }, ticket.getColumn_id(), ticket.getId()).get(0);
     }
 }
