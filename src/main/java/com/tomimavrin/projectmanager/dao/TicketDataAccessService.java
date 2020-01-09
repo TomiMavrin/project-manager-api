@@ -32,7 +32,7 @@ public class TicketDataAccessService implements TicketDao {
                         rs.getTimestamp("date_due"),
                         UUID.fromString(rs.getString("column_id")),
                         UUID.fromString(rs.getString("created_by")),
-                        UUID.fromString(rs.getString("created_by"))
+                        UUID.fromString(rs.getString("assigned_to"))
                 ), ticket.getColumn_id(),ticket.getTitle(), ticket.getSubtitle(), ticket.getDescription(),ticket.getColor(), ticket.getDate_due(), userId, ticket.getAssigned_to()).get(0);
     }
 

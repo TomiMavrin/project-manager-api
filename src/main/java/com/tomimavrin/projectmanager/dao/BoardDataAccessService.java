@@ -1,6 +1,7 @@
 package com.tomimavrin.projectmanager.dao;
 
 import com.tomimavrin.projectmanager.model.Board;
+import com.tomimavrin.projectmanager.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -42,6 +43,18 @@ public class BoardDataAccessService implements BoardDao {
             String description = resultSet.getString("description");
             return new Board(uuid, name,description);
         }, userId);
+    }
+
+    @Override
+    public List<UUID> getBoardsUsers(UUID boardId) {
+        final String query = "SELECT * FROM users_boards WHERE board_id = ?";
+        return jdbcTemplate.query(query, (resultSet, i) -> UUID.fromString(resultSet.getString("user_id")), boardId);
+    }
+
+    @Override
+    public int addUserToBoard(UUID userId, UUID boardId) {
+        final String query = "INSERT INTO users_boards (user_id, board_id) VALUES (?, ?);";
+        return jdbcTemplate.update(query, userId, boardId);
     }
 
     @Override

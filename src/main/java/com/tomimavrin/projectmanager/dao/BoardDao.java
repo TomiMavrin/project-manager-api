@@ -1,15 +1,17 @@
 package com.tomimavrin.projectmanager.dao;
 
 import com.tomimavrin.projectmanager.model.Board;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface BoardDao {
     int createBoard(Board board, UUID userId);
 
     List<Board> getAllUserBoards(UUID userId);
+
+    List<UUID> getBoardsUsers(UUID boardId);
+
+    int addUserToBoard(UUID userId, UUID boardId);
 
     boolean checkBoard(UUID boardId, UUID userId);
 

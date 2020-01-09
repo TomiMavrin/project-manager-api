@@ -2,6 +2,7 @@ package com.tomimavrin.projectmanager.service;
 
 import com.tomimavrin.projectmanager.dao.BoardDao;
 import com.tomimavrin.projectmanager.model.Board;
+import com.tomimavrin.projectmanager.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,14 @@ public class BoardService {
 
     public int editBoard(UUID id){
         return this.boardDao.editBoard(id);
+    }
+
+    public List<UUID> getBoardsUsers(UUID boardId){
+        return this.boardDao.getBoardsUsers(boardId);
+    }
+
+    public int addUserToBoard(UUID userId, UUID boardId) {
+        return this.boardDao.addUserToBoard(userId,boardId);
     }
 
 }

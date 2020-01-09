@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,31 @@ public class BoardController {
         this.userService = userService;
         this.boardService = boardService;
         this.columnService = columnService;
+    }
+
+    @PostMapping("/board/users")
+    public List<User> getBoardsUsers(@RequestParam UUID boardId){
+        List<UUID> uuids = this.boardService.getBoardsUsers(boardId);
+        List<User> users = new ArrayList<>();
+        for (UUID id : uuids) {
+            Optional<User> curUser = this.userService.getUser(id);
+            curUser.ifPresent(users::add);
+        }
+        return users;
+    }
+
+    @PostMapping("/board/users/add")
+    public Response addUserToBoard(@RequestParam String email, @RequestParam UUID boardId){
+        Optional<User> user = this.userService.getUser(email);
+        if(user.isPresent()) {
+            int result = boardService.addUserToBoard(user.get().getId(), boardId);
+            if (result == 1) {
+                return new Response("success", "User successfully added");
+            } else {
+                return new Response("failure", "Something went wrong.");
+            }
+        }
+        return new Response("failure", "Something went wrong.");
     }
 
     @PostMapping("/board/create")
@@ -106,10 +132,11 @@ public class BoardController {
 
     @PostMapping("/ticket/create")
     public Ticket createTicket(@RequestBody Ticket ticket){
-        System.out.println(ticket.toString());
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
         Optional<User> user = userService.getUser(auth.getName());
         UUID userId = user.get().getId();
+        System.out.println(ticket.getAssigned_to());
+        System.out.println(userId);
         return this.ticketService.createTicket(ticket, userId);
     }
 

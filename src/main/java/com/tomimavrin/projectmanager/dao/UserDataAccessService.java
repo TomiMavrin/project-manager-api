@@ -36,7 +36,20 @@ public class UserDataAccessService implements UserDao {
 
     @Override
     public Optional<User> getUser(UUID userId) {
-        return Optional.empty();
+
+        final String query = "SELECT * FROM USERS WHERE id='"+ userId +"' ORDER BY email FETCH FIRST ROW ONLY;";
+        List<User> users = jdbcTemplate.query(query,  (resultSet, i) ->{
+            UUID uuid = UUID.fromString(resultSet.getString("id"));
+            String email = resultSet.getString("email");
+            String username = resultSet.getString("name");
+            return new User(uuid,username,email, "");
+        });
+        if(users.isEmpty()){
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(users.get(0));
+        }
     }
 
     @Override
