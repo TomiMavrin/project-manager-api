@@ -53,7 +53,13 @@ public class BoardDataAccessService implements BoardDao {
 
     @Override
     public int addUserToBoard(UUID userId, UUID boardId) {
-        final String query = "INSERT INTO users_boards (user_id, board_id) VALUES (?, ?);";
+        final String query = "INSERT INTO users_boards (user_id, board_id) VALUES (?, ?) ON CONFLICT DO NOTHING;";
+        return jdbcTemplate.update(query, userId, boardId);
+    }
+
+    @Override
+    public int removeUserFromBoard(UUID userId, UUID boardId) {
+        final String query = "DELETE FROM users_boards WHERE user_id=? AND board_id=?";
         return jdbcTemplate.update(query, userId, boardId);
     }
 

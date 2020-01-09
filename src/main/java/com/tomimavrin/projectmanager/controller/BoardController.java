@@ -61,6 +61,17 @@ public class BoardController {
         return new Response("failure", "Something went wrong.");
     }
 
+    @PostMapping("/board/users/remove")
+    public Response removeUserFromBoard(@RequestParam UUID userId, @RequestParam UUID boardId){
+        int result = boardService.removeUserFromBoard(userId, boardId);
+            if (result == 1) {
+                return new Response("success", "User successfully removed");
+            } else {
+                return new Response("failure", "Something went wrong.");
+            }
+
+    }
+
     @PostMapping("/board/create")
     public Response createBoard(@RequestBody Board board){
         Authentication auth =  SecurityContextHolder.getContext().getAuthentication();

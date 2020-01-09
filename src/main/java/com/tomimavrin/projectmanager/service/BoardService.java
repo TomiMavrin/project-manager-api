@@ -53,4 +53,8 @@ public class BoardService {
         return this.boardDao.addUserToBoard(userId,boardId);
     }
 
+    public int removeUserFromBoard(UUID userId, UUID boardId) {
+        return this.boardDao.removeUserFromBoard(userId, boardId);
+    }
+
 }

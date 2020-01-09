@@ -13,6 +13,8 @@ public interface BoardDao {
 
     int addUserToBoard(UUID userId, UUID boardId);
 
+    int removeUserFromBoard(UUID userId, UUID boardId);
+
     boolean checkBoard(UUID boardId, UUID userId);
 
     Board getBoard(UUID boardID);
