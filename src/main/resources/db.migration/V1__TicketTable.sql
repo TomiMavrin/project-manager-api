@@ -15,6 +15,7 @@ CREATE TABLE AUTHORITIES (
 
 CREATE TABLE BOARDS (
     id uuid DEFAULT uuid_generate_v4 (),
+    owner_id UUID NOT NULL REFERENCES USERS(id),
     name VARCHAR(50) NOT NULL,
     description VARCHAR(256),
     PRIMARY KEY (id)

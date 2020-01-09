@@ -7,12 +7,14 @@ public class Board {
 
     private final UUID id;
     private final String name;
+    private final UUID owner_id;
     private final String description;
     private List<Column> columnList;
 
-    public Board(UUID id, String name, String description) {
+    public Board(UUID id, String name, UUID owner_id, String description) {
         this.id = id;
         this.name = name;
+        this.owner_id = owner_id;
         this.description = description;
     }
 
@@ -34,5 +36,9 @@ public class Board {
 
     public void setColumnList(List<Column> columnList) {
         this.columnList = columnList;
+    }
+
+    public UUID getOwner_id() {
+        return owner_id;
     }
 }

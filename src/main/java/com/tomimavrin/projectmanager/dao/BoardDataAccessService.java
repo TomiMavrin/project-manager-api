@@ -1,12 +1,10 @@
 package com.tomimavrin.projectmanager.dao;
 
 import com.tomimavrin.projectmanager.model.Board;
-import com.tomimavrin.projectmanager.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository("boards")
@@ -24,24 +22,25 @@ public class BoardDataAccessService implements BoardDao {
         final String transaction ="BEGIN;" +
         "CREATE TEMPORARY TABLE bid (id UUID) ON COMMIT DROP; " +
         "WITH rows AS ( " +
-        "INSERT INTO boards (name, description) VALUES (?, ?) RETURNING id)" +
+        "INSERT INTO boards (name, description, owner_id) VALUES (?, ?, ?) RETURNING id)" +
         "INSERT INTO bid (id) SELECT id FROM rows; " +
         "INSERT INTO users_boards (board_id, user_id) SELECT id, ? from bid; " +
         "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
         "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
         "INSERT INTO columns (name, board_id) SELECT ?, id from bid; " +
         "COMMIT;";
-        return jdbcTemplate.update(transaction , board.getName(),board.getDescription(), userId, "To Do", "In Progress", "Done" );
+        return jdbcTemplate.update(transaction , board.getName(),board.getDescription(), userId, userId, "To Do", "In Progress", "Done" );
     }
 
     @Override
     public List<Board> getAllUserBoards(UUID userId) {
-        final String q = "SELECT id,name,description FROM boards INNER JOIN users_boards ON (users_boards.board_id = boards.id) WHERE users_boards.user_id=?";
+        final String q = "SELECT id,name,description,owner_id FROM boards INNER JOIN users_boards ON (users_boards.board_id = boards.id) WHERE users_boards.user_id=?";
         return jdbcTemplate.query(q, (resultSet, i) -> {
             UUID uuid = UUID.fromString(resultSet.getString("id"));
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");
-            return new Board(uuid, name,description);
+            UUID owner_id = UUID.fromString(resultSet.getString("owner_id"));
+            return new Board(uuid, name, owner_id, description);
         }, userId);
     }
 
@@ -80,6 +79,7 @@ public class BoardDataAccessService implements BoardDao {
                 new Board(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("name"),
+                        UUID.fromString(rs.getString("owner_id")),
                         rs.getString("description")
                 ));
     }
@@ -91,11 +91,22 @@ public class BoardDataAccessService implements BoardDao {
 
     @Override
     public int deleteBoard(UUID boardID, UUID userId) {
-        String action = "BEGIN;" +
-                "DELETE FROM users_boards WHERE board_id=? AND user_id=?;" +
-                "DELETE FROM columns where board_id=?;" +
-                "DELETE FROM boards WHERE id=?;" +
-                "COMMIT;";
-        return jdbcTemplate.update(action, boardID, userId, boardID, boardID);
+        final String q = "SELECT owner_id FROM BOARDS WHERE id=?";
+        List<UUID> boards = jdbcTemplate.query(q, (resultSet, i) -> {
+            return UUID.fromString(resultSet.getString("owner_id"));
+        }, boardID);
+
+        UUID owner_id = boards.get(0);
+
+        if(owner_id.toString().equals(userId.toString())) {
+            String action = "BEGIN;" +
+                    "DELETE FROM users_boards WHERE board_id=? AND user_id=?;" +
+                    "DELETE FROM columns where board_id=?;" +
+                    "DELETE FROM boards WHERE id=?;" +
+                    "COMMIT;";
+            return jdbcTemplate.update(action, boardID, userId, boardID, boardID);
+        } else {
+            return -1;
+        }
     }
 }
