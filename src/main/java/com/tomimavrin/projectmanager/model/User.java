@@ -15,10 +15,10 @@ public class User {
     private final String password;
 
     @JsonCreator
-    public User(@JsonProperty UUID id,
-                @JsonProperty String name,
-                @JsonProperty String email,
-                @JsonProperty String password) {
+    public User(@JsonProperty("id") UUID id,
+                @JsonProperty("name") String name,
+                @JsonProperty("email") String email,
+                @JsonProperty("password") String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -41,6 +41,5 @@ public class User {
     public String getPassword() {
         return password;
     }
-
-
 }
+
