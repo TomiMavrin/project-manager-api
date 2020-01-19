@@ -26,7 +26,7 @@ public class UserDataAccessService implements UserDao {
     }
 
     @Override
-    public int createUser(User user){
+    public int createUser(User user) throws Exception{
         final String sql = "INSERT INTO USERS (email, password, name, enabled) VALUES(?, ?, ?, ?)";
         final String auth = "INSERT INTO AUTHORITIES (email, authority) VALUES (?, ?)";
         String code = passEncoder().encode(user.getPassword());

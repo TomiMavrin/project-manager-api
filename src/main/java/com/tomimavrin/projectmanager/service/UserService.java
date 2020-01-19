@@ -19,7 +19,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public int createUser(User user){
+    public int createUser(User user) throws Exception{
         return this.userDao.createUser(user);
     }
 

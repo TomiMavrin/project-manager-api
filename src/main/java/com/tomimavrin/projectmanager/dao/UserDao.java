@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface UserDao {
 
-    int createUser(User user);
+    int createUser(User user) throws Exception;
 
     Optional<User> getUser(UUID userId);
 
