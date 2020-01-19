@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.tomimavrin.projectmanager.ProjectManagerApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.846 s - in com.tomimavrin.projectmanager.ProjectManagerApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.893 s - in com.tomimavrin.projectmanager.ProjectManagerApplicationTests
