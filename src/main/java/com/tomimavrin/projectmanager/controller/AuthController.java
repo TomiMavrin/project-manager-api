@@ -37,13 +37,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public Response register(@RequestBody User user){
-        try {
-            userService.createUser(user);
-            return new Response("success", "User registered successfully");
-        }
-        catch (Exception e){
-            return new Response("failure", e.toString());
-        }
+        userService.createUser(user);
+        return new Response("success", "User registered successfully");
     }
 
     @PostMapping("/user/get")
