@@ -11,6 +11,8 @@ public interface BoardDao {
 
     List<UUID> getBoardsUsers(UUID boardId);
 
+    List<UUID> getNonBoardsUsers(UUID boardId);
+
     int addUserToBoard(UUID userId, UUID boardId);
 
     int removeUserFromBoard(UUID userId, UUID boardId);

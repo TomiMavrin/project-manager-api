@@ -47,18 +47,25 @@ public class BoardController {
         return users;
     }
 
-    @PostMapping("/board/users/add")
-    public Response addUserToBoard(@RequestParam String email, @RequestParam UUID boardId){
-        Optional<User> user = this.userService.getUser(email);
-        if(user.isPresent()) {
-            int result = boardService.addUserToBoard(user.get().getId(), boardId);
-            if (result == 1) {
-                return new Response("success", "User successfully added");
-            } else {
-                return new Response("failure", "Something went wrong.");
-            }
+    @PostMapping("/board/non-users")
+    public List<User> getNonBoardsUsers(@RequestParam UUID boardId){
+        List<UUID> uuids = this.boardService.getNonBoardsUsers(boardId);
+        List<User> users = new ArrayList<>();
+        for (UUID id : uuids) {
+            Optional<User> curUser = this.userService.getUser(id);
+            curUser.ifPresent(users::add);
         }
-        return new Response("failure", "Something went wrong.");
+        return users;
+    }
+
+    @PostMapping("/board/users/add")
+    public Response addUserToBoard(@RequestParam UUID userId, @RequestParam UUID boardId){
+        int result = boardService.addUserToBoard(userId, boardId);
+        if (result == 1) {
+            return new Response("success", "User successfully added");
+        } else {
+            return new Response("failure", "Something went wrong.");
+        }
     }
 
     @PostMapping("/board/users/remove")
@@ -107,6 +114,7 @@ public class BoardController {
         UUID userId = user.get().getId();
         return boardService.getAllUserBoards(userId);
     }
+
 
 
     @GetMapping("/user/board")

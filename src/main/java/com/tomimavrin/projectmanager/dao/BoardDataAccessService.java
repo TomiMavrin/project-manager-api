@@ -51,6 +51,13 @@ public class BoardDataAccessService implements BoardDao {
     }
 
     @Override
+    public List<UUID> getNonBoardsUsers(UUID boardId) {
+        final String query = "select A.user_id from users_boards A where board_id <> ? and user_id not in (\n" +
+                "select user_id from users_boards where board_id = ?) GROUP BY A.user_id";
+        return jdbcTemplate.query(query, (resultSet, i) -> UUID.fromString(resultSet.getString("user_id")), boardId,boardId);
+    }
+
+    @Override
     public int addUserToBoard(UUID userId, UUID boardId) {
         final String query = "INSERT INTO users_boards (user_id, board_id) VALUES (?, ?) ON CONFLICT DO NOTHING;";
         return jdbcTemplate.update(query, userId, boardId);

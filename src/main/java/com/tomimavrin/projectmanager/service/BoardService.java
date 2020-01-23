@@ -49,6 +49,10 @@ public class BoardService {
         return this.boardDao.getBoardsUsers(boardId);
     }
 
+    public List<UUID> getNonBoardsUsers(UUID boardId){
+        return this.boardDao.getNonBoardsUsers(boardId);
+    }
+
     public int addUserToBoard(UUID userId, UUID boardId) {
         return this.boardDao.addUserToBoard(userId,boardId);
     }
